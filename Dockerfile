@@ -1,4 +1,6 @@
-FROM python:3.8-slim AS wheel-builder
+ARG PYTHON_MINOR=3.8
+ARG PYTHON_VERSION=3.8.12
+FROM python:$PYTHON_MINOR-slim AS wheel-builder
 SHELL ["/bin/bash", "-l", "-c"]
 
 COPY ./hack/build-wheels.sh ./hack/build-wheels.sh
@@ -9,7 +11,7 @@ COPY \
     setup.py \
     MANIFEST.in \
     README.md \
-    .
+    ./
 
 # This will build the wheels and place will place them in the
 # /opt/mlserver/dist folder
@@ -18,7 +20,6 @@ RUN ./hack/build-wheels.sh /opt/mlserver/dist
 FROM registry.access.redhat.com/ubi9/ubi-minimal
 SHELL ["/bin/bash", "-c"]
 
-ARG PYTHON_VERSION=3.8.16
 ARG CONDA_VERSION=22.11.1
 ARG MINIFORGE_VERSION=${CONDA_VERSION}-4
 ARG RUNTIMES="all"
@@ -99,7 +100,7 @@ RUN . $CONDA_PATH/etc/profile.d/conda.sh && \
     fi && \
     pip install $(ls "./dist/mlserver-"*.whl) && \
     pip install -r ./requirements/docker.txt && \
-    rm -f /opt/conda/lib/python3.8/site-packages/spacy/tests/package/requirements.txt && \
+    rm -f /opt/conda/lib/python${PYTHON_MINOR}/site-packages/spacy/tests/package/requirements.txt && \
     rm -rf /root/.cache/pip
 
 COPY ./licenses/license.txt .
