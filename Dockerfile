@@ -1,4 +1,5 @@
-FROM python:3.8-slim AS wheel-builder
+ARG PYTHON_MINOR=3.8
+FROM python:$PYTHON_MINOR-slim AS wheel-builder
 SHELL ["/bin/bash", "-c"]
 
 COPY ./hack/build-wheels.sh ./hack/build-wheels.sh
@@ -7,13 +8,13 @@ COPY ./runtimes ./runtimes
 COPY \
     setup.py \
     README.md \
-    .
+    ./
 
 # This will build the wheels and place will place them in the
 # /opt/mlserver/dist folder
 RUN ./hack/build-wheels.sh /opt/mlserver/dist
 
-FROM python:3.8-slim
+FROM python:$PYTHON_MINOR-slim
 SHELL ["/bin/bash", "-c"]
 
 ARG RUNTIMES="all"
@@ -51,7 +52,10 @@ RUN pip install --upgrade pip wheel setuptools && \
     fi
 
 COPY requirements/docker.txt requirements/docker.txt
-RUN pip install -r requirements/docker.txt
+RUN pip install -r requirements/docker.txt && \
+    # 제거된 fastapi-0.103.1 의존성
+    pip uninstall -y pydantic-core annotated-types && \
+    pip install scikit-learn
 
 COPY ./licenses/license.txt .
 COPY \
