@@ -55,7 +55,7 @@ COPY requirements/docker.txt requirements/docker.txt
 RUN pip install -r requirements/docker.txt && \
     # 제거된 fastapi-0.103.1 의존성
     pip uninstall -y pydantic-core annotated-types && \
-    pip install scikit-learn==1.3.0
+    pip install scikit-learn
 
 COPY ./licenses/license.txt .
 COPY \
