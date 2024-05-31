@@ -5,6 +5,7 @@ from setuptools import setup, find_packages
 
 ROOT_PATH = os.path.dirname(__file__)
 PKG_NAME = "mlserver-mlflow"
+MLFLOW_VERSION = os.environ['MLFLOW_VERSION']
 PKG_PATH = os.path.join(ROOT_PATH, PKG_NAME.replace("-", "_"))
 
 
@@ -33,7 +34,7 @@ setup(
     author_email="hello@seldon.io",
     description="MLflow runtime for MLServer",
     packages=find_packages(exclude=["tests", "tests.*"]),
-    install_requires=["mlserver", "mlflow==1.30.0"],
+    install_requires=["mlserver", "mlflow==" + MLFLOW_VERSION],
     long_description=_load_description(),
     long_description_content_type="text/markdown",
     license="Apache 2.0",

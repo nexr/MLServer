@@ -1,6 +1,9 @@
 ARG PYTHON_MINOR=3.8
 ARG PYTHON_VERSION=3.8.12
+
 FROM python:$PYTHON_MINOR-slim AS wheel-builder
+ARG MLFLOW_VERSION=2.11.3
+ENV MLFLOW_VERSION=$MLFLOW_VERSION
 SHELL ["/bin/bash", "-l", "-c"]
 
 COPY ./hack/build-wheels.sh ./hack/build-wheels.sh
