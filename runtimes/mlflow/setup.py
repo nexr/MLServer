@@ -34,7 +34,7 @@ setup(
     author_email="hello@seldon.io",
     description="MLflow runtime for MLServer",
     packages=find_packages(exclude=["tests", "tests.*"]),
-    install_requires=["mlserver", "mlflow==" + MLFLOW_VERSION],
+    install_requires=["mlserver", "mlflow==" + MLFLOW_VERSION, "pytorch", "transformers", "accelerate", "sentencepiece"],
     long_description=_load_description(),
     long_description_content_type="text/markdown",
     license="Apache 2.0",
